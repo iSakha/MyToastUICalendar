@@ -1,22 +1,10 @@
-// var Calendar = tui.Calendar;
 
-// var cal = new Calendar('#calendar', {
-//     defaultView: 'month',
-//     taskView: true,
-//     useCreationPopup: true,
-//     useDetailPopup: true,
-//     template: {
-//         monthDayname: function (dayname) {
-//             return '<span class="calendar-week-dayname-name">' + dayname.label + '</span>';
-//         }
-
-//     }
-// });
 var CalendarList = [];
+var schedulesList = [];
 
 getCalendarsList();
 createCalendarList();
-
+// getSchedulesList();
 
 function CalendarInfo() {
     this.id = null;
@@ -32,41 +20,20 @@ function addCalendar(calendar) {
     CalendarList.push(calendar);
 }
 
-function createCalendarList(data) {
+function createCalendarList(dataFromServer) {
 
-    console.log("CalendarObj:", data);
+    // console.log("CalendarObj:", data);
     var calendar;
-    // var id = 0;
 
-    calendar = new CalendarInfo();
-    // id += 1;
-    calendar.id = data[0].id;
-    calendar.name = data[0].cal_name;
-    calendar.color = data[0].color;
-    calendar.bgColor = data[0].bgColor;
-    // calendar.dragBgColor = '#9e5fff';
-    // calendar.borderColor = '#9e5fff';
-    addCalendar(calendar);
+    for (let i = 0; i < dataFromServer.length; i++) {
+        calendar = new CalendarInfo();
+        calendar.id = dataFromServer[i].id;
+        calendar.name = dataFromServer[i].cal_name;
+        calendar.color = dataFromServer[i].color;
+        calendar.bgColor = dataFromServer[i].bgColor;
 
-    calendar = new CalendarInfo();
-    // id += 1;
-    calendar.id = data[1].id;
-    calendar.name = data[1].cal_name;
-    calendar.color = data[1].color;
-    calendar.bgColor = data[1].bgColor;
-    // calendar.dragBgColor = '#00a9ff';
-    // calendar.borderColor = '#00a9ff';
-    addCalendar(calendar);
-
-    calendar = new CalendarInfo();
-    // id += 1;
-    calendar.id = data[2].id;
-    calendar.name = data[2].cal_name;
-    calendar.color = data[2].color;
-    calendar.bgColor = data[2].bgColor;
-    // calendar.dragBgColor = '#ff5583';
-    // calendar.borderColor = '#ff5583';
-    addCalendar(calendar);
+        addCalendar(calendar);
+    }
 
     return CalendarList;
 
@@ -90,7 +57,7 @@ function createCalendar(window, Calendar) {
         defaultView: 'month',
         useCreationPopup: useCreationPopup,
         useDetailPopup: useDetailPopup,
-        calendars: CalendarList
+        calendars: CalendarList,
         // template: {
         //     milestone: function (model) {
         //         return '<span class="calendar-font-icon ic-milestone-b"></span> <span style="background-color: ' + model.bgColor + '">' + model.title + '</span>';
@@ -106,20 +73,22 @@ function createCalendar(window, Calendar) {
 
     // *********************************************************
 
-
+    console.log("schedulesList:", schedulesList);
     cal.createSchedules([
-        {
-            id: '1',
-            calendarId: '1',
-            title: 'my schedule',
-            category: 'time',
-            dueDateClass: '',
-            start: '2022-03-23T22:30:00+09:00',
-            end: '2022-03-26T02:30:00+09:00'
-        },
+        // {
+        //     id: schedulesList[0].id,
+        //     calendarId: schedulesList[0].id_cal,
+        //     title: schedulesList[0].event_name,
+        //     category: 'time',
+        //     dueDateClass: '',
+        //     start: '2022-03-23',
+        //     // start: '2022-03-23T22:30:00+09:00',
+        //     end: '2022-03-26'
+        //     // end: '2022-03-26T02:30:00+09:00'
+        // },
         {
             id: '2',
-            calendarId: '1',
+            calendarId: '2',
             title: 'second schedule',
             category: 'time',
             dueDateClass: '',
@@ -128,6 +97,7 @@ function createCalendar(window, Calendar) {
             isReadOnly: true    // schedule is read-only
         }
     ]);
+    
 
     // event handlers
     cal.on({
@@ -191,6 +161,33 @@ function createCalendar(window, Calendar) {
 
 };
 
+function createEventsList(schedulesList, cal) {
+    console.log("schedulesList", schedulesList);
+    cal.createSchedules([
+        {
+            id: '1',
+            calendarId: '1',
+            title: 'my schedule',
+            category: 'time',
+            dueDateClass: '',
+            start: '2022-03-23',
+            // start: '2022-03-23T22:30:00+09:00',
+            end: '2022-03-26'
+            // end: '2022-03-26T02:30:00+09:00'
+        },
+        {
+            id: '2',
+            calendarId: '2',
+            title: 'second schedule',
+            category: 'time',
+            dueDateClass: '',
+            start: '2022-03-20T17:30:00+09:00',
+            end: '2022-03-21T17:31:00+09:00',
+            isReadOnly: true    // schedule is read-only
+        }
+    ]);
+}
+
 function getCalendarsList() {
 
     // using fetch
@@ -206,9 +203,34 @@ function getCalendarsList() {
         .then(data => {
             // enter you logic when the fetch is successful
             console.log(data);
-            createCalendarList(data);    
+            createCalendarList(data);
         })
-        .then(createCalendar)
+        .then(getSchedulesList)
+        .then(createCalendar)       
+        .catch(error => {
+            // enter your logic for when there is an error (ex. error toast)
+            console.log(error)
+        })
+
+}
+
+function getSchedulesList() {
+
+    // using fetch
+
+    fetch('http://82.209.203.205:3055/events', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: ""
+    })
+        .then(res => res.json())
+        .then(data => {
+            // enter you logic when the fetch is successful
+            schedulesList = data;
+            console.log(data);
+        })
         .catch(error => {
             // enter your logic for when there is an error (ex. error toast)
             console.log(error)
