@@ -13,9 +13,9 @@
 //     }
 // });
 var CalendarList = [];
-createCalendarList();
-getCalendarsList();
 
+getCalendarsList();
+createCalendarList();
 
 
 function CalendarInfo() {
@@ -32,38 +32,40 @@ function addCalendar(calendar) {
     CalendarList.push(calendar);
 }
 
-function createCalendarList() {
+function createCalendarList(data) {
+
+    console.log("CalendarObj:", data);
     var calendar;
-    var id = 0;
+    // var id = 0;
 
     calendar = new CalendarInfo();
-    id += 1;
-    calendar.id = String(id);
-    calendar.name = 'My Calendar';
-    calendar.color = '#ffffff';
-    calendar.bgColor = '#9e5fff';
-    calendar.dragBgColor = '#9e5fff';
-    calendar.borderColor = '#9e5fff';
+    // id += 1;
+    calendar.id = data[0].id;
+    calendar.name = data[0].cal_name;
+    calendar.color = data[0].color;
+    calendar.bgColor = data[0].bgColor;
+    // calendar.dragBgColor = '#9e5fff';
+    // calendar.borderColor = '#9e5fff';
     addCalendar(calendar);
 
     calendar = new CalendarInfo();
-    id += 1;
-    calendar.id = String(id);
-    calendar.name = 'Company';
-    calendar.color = '#ffffff';
-    calendar.bgColor = '#00a9ff';
-    calendar.dragBgColor = '#00a9ff';
-    calendar.borderColor = '#00a9ff';
+    // id += 1;
+    calendar.id = data[1].id;
+    calendar.name = data[1].cal_name;
+    calendar.color = data[1].color;
+    calendar.bgColor = data[1].bgColor;
+    // calendar.dragBgColor = '#00a9ff';
+    // calendar.borderColor = '#00a9ff';
     addCalendar(calendar);
 
     calendar = new CalendarInfo();
-    id += 1;
-    calendar.id = String(id);
-    calendar.name = 'Family';
-    calendar.color = '#ffffff';
-    calendar.bgColor = '#ff5583';
-    calendar.dragBgColor = '#ff5583';
-    calendar.borderColor = '#ff5583';
+    // id += 1;
+    calendar.id = data[2].id;
+    calendar.name = data[2].cal_name;
+    calendar.color = data[2].color;
+    calendar.bgColor = data[2].bgColor;
+    // calendar.dragBgColor = '#ff5583';
+    // calendar.borderColor = '#ff5583';
     addCalendar(calendar);
 
     return CalendarList;
@@ -204,9 +206,9 @@ function getCalendarsList() {
         .then(data => {
             // enter you logic when the fetch is successful
             console.log(data);
-            // createHtmlCalendarList(data);
-            createCalendar();
+            createCalendarList(data);    
         })
+        .then(createCalendar)
         .catch(error => {
             // enter your logic for when there is an error (ex. error toast)
             console.log(error)
