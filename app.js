@@ -208,17 +208,33 @@ function createEventsList(schedulesList, cal) {
     ]);
 }
 
+// function getCalendarsList() {
+
+//     // using fetch
+
+//     fetch('http://82.209.203.205:3055/calendars', {
+//         method: 'POST',
+//         headers: {
+//             'Content-Type': 'application/json',
+//         },
+//         body: ""
+//     })
+//         .then(res => res.json())
+//         .then(data => {
+//             // enter you logic when the fetch is successful
+//             console.log(data);
+//             createCalendarList(data);
+//         })
+//         .then(createCalendar)
+//         .catch(error => {
+//             // enter your logic for when there is an error (ex. error toast)
+//             console.log(error)
+//         })
+
+// }
+
 function getCalendarsList() {
-
-    // using fetch
-
-    fetch('http://82.209.203.205:3055/calendars', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: ""
-    })
+    fetch('http://82.209.203.205:3055/calendars')
         .then(res => res.json())
         .then(data => {
             // enter you logic when the fetch is successful
@@ -230,31 +246,51 @@ function getCalendarsList() {
             // enter your logic for when there is an error (ex. error toast)
             console.log(error)
         })
+};
 
-}
+
+
+// function getSchedulesList() {
+
+//     // using fetch
+
+//     fetch('http://82.209.203.205:3055/events', {
+//         method: 'POST',
+//         headers: {
+//             'Content-Type': 'application/json',
+//         },
+//         body: ""
+//     })
+//         .then(res => res.json())
+//         .then(data => {
+//             // enter you logic when the fetch is successful
+//             schedulesList = data;
+//             console.log(data);
+//         })
+//         .then(getCalendarsList)
+//         .catch(error => {
+//             // enter your logic for when there is an error (ex. error toast)
+//             console.log(error)
+//         })
+
+// }
 
 function getSchedulesList() {
 
     // using fetch
 
-    fetch('http://82.209.203.205:3055/events', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: ""
+    fetch('http://82.209.203.205:3055/events')
+    .then(res => res.json())
+    .then(data => {
+        // enter you logic when the fetch is successful
+        schedulesList = data;
+        console.log(data);
     })
-        .then(res => res.json())
-        .then(data => {
-            // enter you logic when the fetch is successful
-            schedulesList = data;
-            console.log(data);
-        })
-        .then(getCalendarsList)
-        .catch(error => {
-            // enter your logic for when there is an error (ex. error toast)
-            console.log(error)
-        })
+    .then(getCalendarsList)
+    .catch(error => {
+        // enter your logic for when there is an error (ex. error toast)
+        console.log(error)
+    })
 
 }
 
