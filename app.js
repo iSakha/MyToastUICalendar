@@ -2,9 +2,9 @@
 var CalendarList = [];
 var schedulesList = [];
 
-getCalendarsList();
-createCalendarList();
-// getSchedulesList();
+getSchedulesList();
+// getCalendarsList();
+// createCalendarList();
 
 function CalendarInfo() {
     this.id = null;
@@ -73,31 +73,53 @@ function createCalendar(window, Calendar) {
 
     // *********************************************************
 
-    console.log("schedulesList:", schedulesList);
-    cal.createSchedules([
-        // {
-        //     id: schedulesList[0].id,
-        //     calendarId: schedulesList[0].id_cal,
-        //     title: schedulesList[0].event_name,
-        //     category: 'time',
-        //     dueDateClass: '',
-        //     start: '2022-03-23',
-        //     // start: '2022-03-23T22:30:00+09:00',
-        //     end: '2022-03-26'
-        //     // end: '2022-03-26T02:30:00+09:00'
-        // },
-        {
-            id: '2',
-            calendarId: '2',
-            title: 'second schedule',
-            category: 'time',
-            dueDateClass: '',
-            start: '2022-03-20T17:30:00+09:00',
-            end: '2022-03-21T17:31:00+09:00',
-            isReadOnly: true    // schedule is read-only
-        }
-    ]);
     
+
+    for (let i = 0; i < schedulesList.length; i++) {
+        console.log(i, "start date:", schedulesList[i].start);
+        console.log(i, "end date:", schedulesList[i].start);
+
+        let str = schedulesList[i].start
+        schedulesList[i].start = str.substr(0, 19);
+        str = schedulesList[i].end
+        schedulesList[i].end = str.substr(0, 19);
+
+        console.log(i, "start date:", schedulesList[i].start);
+        console.log(i, "end date:", schedulesList[i].end);
+        schedulesList[i].category = 'time';
+    }
+
+    console.log("schedulesList:", schedulesList);
+    // console.log("schedule_0:", schedulesList[0]);
+
+
+    // cal.createSchedules([
+    //     {
+    //         id: schedulesList[0].id,
+    //         calendarId: schedulesList[0].id_cal,
+    //         title: schedulesList[0].event_name,
+    //         category: 'time',
+    //         dueDateClass: '',
+    //         // start: schedulesList[0].start_date,
+    //         start: '2022-03-23T02:30:00',
+    //         // end: schedulesList[0].end_date
+    //         end: '2022-03-26T22:30:00'
+    //     },
+    //     {
+    //         id: '2',
+    //         calendarId: '2',
+    //         title: 'second schedule',
+    //         category: 'time',
+    //         dueDateClass: '',
+    //         start: '2022-03-20T17:30:00+09:00',
+    //         end: '2022-03-21T17:31:00+09:00',
+    //         isReadOnly: true    // schedule is read-only
+    //     }
+    // ]);
+
+    cal.createSchedules(schedulesList);
+
+
 
     // event handlers
     cal.on({
@@ -155,12 +177,10 @@ function createCalendar(window, Calendar) {
         }
     });
 
-    function saveNewSchedule(e) {
-        console.log(e);
-    }
+
 
 };
-
+// TODO  swap createCalendarList and createEventList
 function createEventsList(schedulesList, cal) {
     console.log("schedulesList", schedulesList);
     cal.createSchedules([
@@ -205,8 +225,7 @@ function getCalendarsList() {
             console.log(data);
             createCalendarList(data);
         })
-        .then(getSchedulesList)
-        .then(createCalendar)       
+        .then(createCalendar)
         .catch(error => {
             // enter your logic for when there is an error (ex. error toast)
             console.log(error)
@@ -231,9 +250,32 @@ function getSchedulesList() {
             schedulesList = data;
             console.log(data);
         })
+        .then(getCalendarsList)
         .catch(error => {
             // enter your logic for when there is an error (ex. error toast)
             console.log(error)
         })
 
+}
+
+function saveNewSchedule(e) {
+    console.log(e);
+    fetch('http://82.209.203.205:3055/events', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: ""
+    })
+        .then(res => res.json())
+        .then(data => {
+            // enter you logic when the fetch is successful
+            schedulesList = data;
+            console.log(data);
+        })
+        .then(getCalendarsList)
+        .catch(error => {
+            // enter your logic for when there is an error (ex. error toast)
+            console.log(error)
+        })
 }
