@@ -206,9 +206,13 @@ function saveNewSchedule(e) {
             getSchedulesList();
             console.log(data);
         })
-        // .then(location.reload())
+        .then(refresh)
         .catch(error => {
             // enter your logic for when there is an error (ex. error toast)
             console.log(error)
         })
+}
+
+function refresh() {
+    location.reload();
 }
