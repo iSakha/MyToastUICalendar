@@ -203,11 +203,10 @@ function saveNewSchedule(e) {
     })
         .then(res => res.json())
         .then(data => {
-            // enter you logic when the fetch is successful
-            // schedulesList = data;
+            getSchedulesList();
             console.log(data);
         })
-        // .then(getCalendarsList)
+        // .then(location.reload())
         .catch(error => {
             // enter your logic for when there is an error (ex. error toast)
             console.log(error)
