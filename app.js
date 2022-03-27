@@ -1,6 +1,7 @@
 
 var CalendarList = [];
 var schedulesList = [];
+var currentEvent = {};
 
 getSchedulesList();
 
@@ -41,7 +42,7 @@ function createCalendarList(dataFromServer) {
 // *********************************************************
 function createCalendar(window, Calendar) {
 
-    console.log(CalendarList);
+    // console.log(CalendarList);
 
     var Calendar = tui.Calendar;
 
@@ -74,20 +75,20 @@ function createCalendar(window, Calendar) {
 
 
     for (let i = 0; i < schedulesList.length; i++) {
-        console.log(i, "start date:", schedulesList[i].start);
-        console.log(i, "end date:", schedulesList[i].start);
+        // console.log(i, "start date:", schedulesList[i].start);
+        // console.log(i, "end date:", schedulesList[i].start);
 
         let str = schedulesList[i].start
         schedulesList[i].start = str.substr(0, 19);
         str = schedulesList[i].end
         schedulesList[i].end = str.substr(0, 19);
 
-        console.log(i, "start date:", schedulesList[i].start);
-        console.log(i, "end date:", schedulesList[i].end);
+        // console.log(i, "start date:", schedulesList[i].start);
+        // console.log(i, "end date:", schedulesList[i].end);
         schedulesList[i].category = 'time';
     }
 
-    console.log("schedulesList:", schedulesList);
+    // console.log("schedulesList:", schedulesList);
     // console.log("schedule_0:", schedulesList[0]);
 
     cal.createSchedules(schedulesList);
@@ -101,9 +102,11 @@ function createCalendar(window, Calendar) {
         },
         'clickSchedule': function (e) {
             console.log('clickSchedule', e);
+            setCurrentEvent(e.schedule);
         },
         'clickDayname': function (date) {
             console.log('clickDayname', date);
+            
         },
         'beforeCreateSchedule': function (e) {
             // console.log('beforeCreateSchedule', e);
@@ -119,12 +122,13 @@ function createCalendar(window, Calendar) {
                 changes.category = 'time';
             }
 
-            cal.updateSchedule(schedule.id, schedule.calendarId, changes);
-            refreshScheduleVisibility();
+            updateSchedule(e);
+            // refreshScheduleVisibility();
         },
         'beforeDeleteSchedule': function (e) {
             console.log('beforeDeleteSchedule', e);
-            cal.deleteSchedule(e.schedule.id, e.schedule.calendarId);
+            deleteSchedule(e.schedule.id);
+            // cal.deleteSchedule(e.schedule.id, e.schedule.calendarId);
         },
         'afterRenderSchedule': function (e) {
             var schedule = e.schedule;
@@ -156,7 +160,7 @@ function getCalendarsList() {
         .then(res => res.json())
         .then(data => {
             // enter you logic when the fetch is successful
-            console.log(data);
+            console.log("calendarList:", data);
             createCalendarList(data);
         })
         .then(createCalendar)
@@ -175,7 +179,7 @@ function getSchedulesList() {
         .then(data => {
             // enter you logic when the fetch is successful
             schedulesList = data;
-            console.log(data);
+            console.log("schedulesList:", data);
         })
         .then(getCalendarsList)
         .catch(error => {
@@ -186,14 +190,14 @@ function getSchedulesList() {
 }
 
 function saveNewSchedule(e) {
-    console.log(e);
+    // console.log(e);
     let event = {};
     event.calendarId = e.calendarId;
     event.title = e.title;
     event.start = e.start._date;
     event.end = e.end._date;
     event.location = e.location;
-    console.log(event);
+    // console.log(event);
     fetch('http://82.209.203.205:3055/events', {
         method: 'POST',
         headers: {
@@ -203,8 +207,8 @@ function saveNewSchedule(e) {
     })
         .then(res => res.json())
         .then(data => {
-            getSchedulesList();
-            console.log(data);
+            // getSchedulesList();
+            console.log("data:", data);
         })
         .then(refresh)
         .catch(error => {
@@ -212,6 +216,67 @@ function saveNewSchedule(e) {
             console.log(error)
         })
 }
+
+function deleteSchedule(e) {
+    // console.log(e);
+    let data = {};
+    data.id = e;
+    fetch('http://82.209.203.205:3055/events', {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data)
+    })
+        .then(res => res.json())
+        .then(data => {
+            // getSchedulesList();
+            console.log("data:", data);
+        })
+        .then(refresh)
+        .catch(error => {
+            // enter your logic for when there is an error (ex. error toast)
+            console.log(error)
+        })
+}
+
+function setCurrentEvent(e) {
+    currentEvent.id = e.id;
+    currentEvent.calendarId = e.calendarId;
+    currentEvent.title = e.title;
+    currentEvent.start = e.start._date;
+    currentEvent.end = e.end._date;
+    currentEvent.location = e.location;
+    console.log(currentEvent);
+}
+function updateSchedule(e) {
+        // console.log(e);
+        let event = {};
+        event.calendarId = e.calendarId;
+        event.title = e.title;
+        event.start = e.start._date;
+        event.end = e.end._date;
+        event.location = e.location;
+        console.log(event);
+        // fetch('http://82.209.203.205:3055/events', {
+        //     method: 'POST',
+        //     headers: {
+        //         'Content-Type': 'application/json',
+        //     },
+        //     body: JSON.stringify(event)
+        // })
+        //     .then(res => res.json())
+        //     .then(data => {
+        //         // getSchedulesList();
+        //         console.log("data:", data);
+        //     })
+        //     .then(refresh)
+        //     .catch(error => {
+        //         // enter your logic for when there is an error (ex. error toast)
+        //         console.log(error)
+        //     })
+}
+
 
 function refresh() {
     location.reload();
