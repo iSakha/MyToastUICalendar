@@ -259,7 +259,17 @@ function updateSchedule(e) {
         console.log("keyToChange:", keyToChange);
 
         if (keyToChange !== "state") {
-            updatedEvent[keyToChange] = objChanges[keyToChange];
+            if (keyToChange === ("start" || "end")) {
+
+                let val = objChanges[keyToChange];
+                let time = val._date;
+                console.log("time:", time);
+                // console.log("keyToChange._date:", keyToChange._date);
+                // updatedEvent[keyToChange] = objChanges[keyToChange._date];
+            } else {
+                updatedEvent[keyToChange] = objChanges[keyToChange];
+            }
+
         }
     }
     console.log("updatedEvent:", updatedEvent);
