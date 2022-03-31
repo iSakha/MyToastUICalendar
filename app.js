@@ -1,7 +1,7 @@
 
 var CalendarList = [];
 var schedulesList = [];
-var currentEvent = {};
+var selectedEvent = {};
 
 getSchedulesList();
 
@@ -229,40 +229,78 @@ function deleteSchedule(e) {
 }
 
 function setCurrentEvent(e) {
-    currentEvent.id = e.id;
-    currentEvent.calendarId = e.calendarId;
-    currentEvent.title = e.title;
-    currentEvent.start = e.start._date;
-    currentEvent.end = e.end._date;
-    currentEvent.location = e.location;
-    console.log(currentEvent);
+    selectedEvent.id = e.id;
+    selectedEvent.calendarId = e.calendarId;
+    selectedEvent.title = e.title;
+    selectedEvent.start = e.start._date;
+    selectedEvent.end = e.end._date;
+    selectedEvent.location = e.location;
+    console.log("currentEvent:", selectedEvent);
 }
 function updateSchedule(e) {
-    // console.log(e);
-    // let event = {};
-    // event.calendarId = e.calendarId;
-    // event.title = e.title;
-    // event.start = e.start._date;
-    // event.end = e.end._date;
-    // event.location = e.location;
-    // console.log(event);
-    fetch('http://82.209.203.205:3055/events', {
-        method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(currentEvent)
-    })
-        .then(res => res.json())
-        .then(data => {
-            // getSchedulesList();
-            console.log("data:", data);
-        })
-        // .then(refresh)
-        .catch(error => {
-            // enter your logic for when there is an error (ex. error toast)
-            console.log(error)
-        })
+
+    let objChanges = {};
+    objChanges = e.changes;
+    console.log("Changes:", objChanges);
+    let arrChanges = Object.keys(objChanges);
+    console.log("arrChanges:", arrChanges);
+
+    console.log("selectedEvent:", selectedEvent);
+    console.log("objChanges:", objChanges);
+
+    let updatedEvent = {};
+    updatedEvent = selectedEvent;
+    let arrUpdatedEvent = Object.keys(updatedEvent);
+    console.log("updatedEvent:", updatedEvent);
+    console.log("arrUpdatedEvent:", arrUpdatedEvent);
+
+    for (let i = 0; i < arrChanges.length; i++) {
+        let keyToChange = arrChanges[i];
+        console.log("keyToChange:", keyToChange);
+
+        if (keyToChange !== "state") {
+            updatedEvent[keyToChange] = objChanges[keyToChange];
+        }
+    }
+    console.log("updatedEvent:", updatedEvent);
+
+    // console.log("event:", event);
+    // console.log("Changes:", e.changes);
+
+
+    // // console.log("Start_date:", e.changes.start._date);
+    // console.log("updateSchedule func:", selectedEvent);
+
+    // let arrayCurrentEvent = Object.keys(selectedEvent);
+    // let arrayEvent = Object.keys(event);
+    // console.log("currentEvent.length:", arrayCurrentEvent.length);
+
+    // for (let i = 0; i < arrayCurrentEvent.length; i++) {
+    //     console.log("curEv:", i, arrayCurrentEvent[i]);
+    //     // console.log("ev:", arrayEvent[i]);
+    //     // console.log(currentEvent.arrayCurrentEvent[i]);
+    // }
+    // let key = arrayCurrentEvent[2];
+    // console.log(typeof (key));
+    // console.log(selectedEvent[key]);
+
+    // fetch('http://82.209.203.205:3055/events', {
+    //     method: 'PUT',
+    //     headers: {
+    //         'Content-Type': 'application/json',
+    //     },
+    //     body: JSON.stringify(currentEvent)
+    // })
+    //     .then(res => res.json())
+    //     .then(data => {
+    //         // getSchedulesList();
+    //         console.log("data:", data);
+    //     })
+    //     // .then(refresh)
+    //     .catch(error => {
+    //         // enter your logic for when there is an error (ex. error toast)
+    //         console.log(error)
+    //     })
 }
 
 
