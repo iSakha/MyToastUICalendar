@@ -264,26 +264,6 @@ function updateSchedule(e) {
     }
     console.log("updatedEvent:", updatedEvent);
 
-    // console.log("event:", event);
-    // console.log("Changes:", e.changes);
-
-
-    // // console.log("Start_date:", e.changes.start._date);
-    // console.log("updateSchedule func:", selectedEvent);
-
-    // let arrayCurrentEvent = Object.keys(selectedEvent);
-    // let arrayEvent = Object.keys(event);
-    // console.log("currentEvent.length:", arrayCurrentEvent.length);
-
-    // for (let i = 0; i < arrayCurrentEvent.length; i++) {
-    //     console.log("curEv:", i, arrayCurrentEvent[i]);
-    //     // console.log("ev:", arrayEvent[i]);
-    //     // console.log(currentEvent.arrayCurrentEvent[i]);
-    // }
-    // let key = arrayCurrentEvent[2];
-    // console.log(typeof (key));
-    // console.log(selectedEvent[key]);
-
     // fetch('http://82.209.203.205:3055/events', {
     //     method: 'PUT',
     //     headers: {
