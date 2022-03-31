@@ -75,23 +75,9 @@ function createCalendar(window, Calendar) {
 
 
     for (let i = 0; i < schedulesList.length; i++) {
-        // console.log(i, "start date:", schedulesList[i].start);
-        // console.log(i, "end date:", schedulesList[i].start);
-
-        // let str = schedulesList[i].start
-        // schedulesList[i].start = str.substr(0, 19);
-        // str = schedulesList[i].end
-        // schedulesList[i].end = str.substr(0, 19);
-
         console.log(i, "start date:", schedulesList[i].start);
         schedulesList[i].category = 'time';
     }
-
-    
-
-
-    // console.log("schedulesList:", schedulesList);
-    // console.log("schedule_0:", schedulesList[0]);
 
     cal.createSchedules(schedulesList);
 
@@ -209,7 +195,7 @@ function saveNewSchedule(e) {
     })
         .then(res => res.json())
         .then(data => {
-            // getSchedulesList();
+            getSchedulesList();
             console.log("data:", data);
         })
         .then(refresh)
@@ -232,7 +218,7 @@ function deleteSchedule(e) {
     })
         .then(res => res.json())
         .then(data => {
-            // getSchedulesList();
+            getSchedulesList();
             console.log("data:", data);
         })
         .then(refresh)
@@ -253,30 +239,30 @@ function setCurrentEvent(e) {
 }
 function updateSchedule(e) {
     // console.log(e);
-    let event = {};
-    event.calendarId = e.calendarId;
-    event.title = e.title;
-    event.start = e.start._date;
-    event.end = e.end._date;
-    event.location = e.location;
-    console.log(event);
-    // fetch('http://82.209.203.205:3055/events', {
-    //     method: 'POST',
-    //     headers: {
-    //         'Content-Type': 'application/json',
-    //     },
-    //     body: JSON.stringify(event)
-    // })
-    //     .then(res => res.json())
-    //     .then(data => {
-    //         // getSchedulesList();
-    //         console.log("data:", data);
-    //     })
-    //     .then(refresh)
-    //     .catch(error => {
-    //         // enter your logic for when there is an error (ex. error toast)
-    //         console.log(error)
-    //     })
+    // let event = {};
+    // event.calendarId = e.calendarId;
+    // event.title = e.title;
+    // event.start = e.start._date;
+    // event.end = e.end._date;
+    // event.location = e.location;
+    // console.log(event);
+    fetch('http://82.209.203.205:3055/events', {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(currentEvent)
+    })
+        .then(res => res.json())
+        .then(data => {
+            // getSchedulesList();
+            console.log("data:", data);
+        })
+        // .then(refresh)
+        .catch(error => {
+            // enter your logic for when there is an error (ex. error toast)
+            console.log(error)
+        })
 }
 
 
