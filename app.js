@@ -185,7 +185,7 @@ function saveNewSchedule(e) {
     event.start = e.start._date;
     event.end = e.end._date;
     event.location = e.location;
-    // console.log(event);
+    console.log(event);
     fetch('http://82.209.203.205:3055/events', {
         method: 'POST',
         headers: {
@@ -259,13 +259,13 @@ function updateSchedule(e) {
         console.log("keyToChange:", keyToChange);
 
         if (keyToChange !== "state") {
-            if (keyToChange === ("start" || "end")) {
+
+            if (keyToChange === "start" || keyToChange === "end") {
 
                 let val = objChanges[keyToChange];
                 let time = val._date;
                 console.log("time:", time);
-                // console.log("keyToChange._date:", keyToChange._date);
-                // updatedEvent[keyToChange] = objChanges[keyToChange._date];
+                updatedEvent[keyToChange] = time;
             } else {
                 updatedEvent[keyToChange] = objChanges[keyToChange];
             }
@@ -274,23 +274,23 @@ function updateSchedule(e) {
     }
     console.log("updatedEvent:", updatedEvent);
 
-    // fetch('http://82.209.203.205:3055/events', {
-    //     method: 'PUT',
-    //     headers: {
-    //         'Content-Type': 'application/json',
-    //     },
-    //     body: JSON.stringify(currentEvent)
-    // })
-    //     .then(res => res.json())
-    //     .then(data => {
-    //         // getSchedulesList();
-    //         console.log("data:", data);
-    //     })
-    //     // .then(refresh)
-    //     .catch(error => {
-    //         // enter your logic for when there is an error (ex. error toast)
-    //         console.log(error)
-    //     })
+    fetch('http://82.209.203.205:3055/events', {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(updatedEvent)
+    })
+        .then(res => res.json())
+        .then(data => {
+            getSchedulesList();
+            console.log("data:", data);
+        })
+        .then(refresh)
+        .catch(error => {
+            // enter your logic for when there is an error (ex. error toast)
+            console.log(error)
+        })
 }
 
 
