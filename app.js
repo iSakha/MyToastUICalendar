@@ -293,7 +293,6 @@ function updateSchedule(e) {
         })
 }
 
-
 function refresh() {
     location.reload();
 }
