@@ -296,3 +296,11 @@ function updateSchedule(e) {
 function refresh() {
     location.reload();
 }
+
+//  Equipment reservation
+// ====================================================================
+document.getElementById('equip-reserv').addEventListener('click', equipReservation);
+
+function equipReservation() {
+    window.open('http://82.209.203.205:3060','_blank');
+}
